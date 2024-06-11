@@ -19,12 +19,12 @@ int	main(int argc, char **argv)
 	memset(&args, 0, sizeof(args));
 	if (argc == 5 || argc == 6)
 	{
-		args.nbr_of_philo = atoi(argv[1]);
-		args.time_to_die = atoi(argv[2]);
-		args.time_to_eat = atoi(argv[3]);
-		args.time_to_sleep = atoi(argv[4]);
+		args.nbr_of_philo = ft_atoi(argv[1]);
+		args.time_to_die = ft_atoi(argv[2]);
+		args.time_to_eat = ft_atoi(argv[3]);
+		args.time_to_sleep = ft_atoi(argv[4]);
 		if (argc == 6)
-			args.nbr_of_meals = atoi(argv[5]);
+			args.nbr_of_meals = ft_atoi(argv[5]);
 	}
 	else
 	{
