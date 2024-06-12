@@ -21,6 +21,13 @@
 # include <sys/time.h>
 # include <pthread.h>
 
+typedef struct s_philo
+{
+	int	id;
+
+
+}	t_philo;
+
 typedef struct s_args
 {
 	int	nbr_of_philo;
