@@ -14,5 +14,5 @@
 
 void	*philosopher(void *arg)
 {
-	printf("philosopher %d is thinking", )
+	printf("philosopher %d is thinking", );
 }
