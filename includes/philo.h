@@ -30,6 +30,25 @@ typedef struct s_args
 	int	nbr_of_meals;
 }	t_args;
 
+typedef struct s_philo
+{
+	int				id;
+	int				meals_eaten;
+	int				left_fork;
+	int				right_fork;
+	int				last_meal;
+	pthread_t		thread;
+	t_args			*args;
+}	t_philo;
+
+typedef struct s_table
+{
+	t_philo	*philos;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t	print;
+	t_args	args;
+}	t_table;
+
 void	ft_putstr_fd(char *str, int fd);
 int		ft_atoi(const char *str);
 
