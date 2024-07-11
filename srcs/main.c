@@ -31,20 +31,12 @@ int	main(int argc, char **argv)
 	memset(&args, 0, sizeof(args));
 	if (argc == 5 || argc == 6)
 	{
-<<<<<<< HEAD
-		args.nbr_of_philo = ft_atoi(argv[1]);
-		args.time_to_die = ft_atoi(argv[2]);
-		args.time_to_eat = ft_atoi(argv[3]);
-		args.time_to_sleep = ft_atoi(argv[4]);
-		if (argc == 6)
-			args.nbr_of_meals = ft_atoi(argv[5]);
-=======
 		parse_args(argc, argv, &args);
->>>>>>> 8ff078a44b313a710d59293af2b29b0ac9756195
 		printf("%d, %d, %d, %d, %d\n", args.nbr_of_philo, args.time_to_die,
 			args.time_to_eat, args.time_to_sleep, args.nbr_of_meals);
 	}
 	else
 		ft_putstr_fd("Error: wrong number of arguments\n", 2);
 	return (0);
+	
 }
