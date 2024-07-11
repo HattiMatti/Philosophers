@@ -12,7 +12,44 @@
 
 #include "../includes/philo.h"
 
-void	*philosopher(void *arg)
+void	init_table(t_table *table)
 {
-	printf("philosopher %d is thinking", );
+	int	i;
+
+	i = 0;
+	table->philos = (t_philo *)malloc(sizeof(t_philo) * table->nbr_of_philos);
+	if (table->philos == NULL)
+	{
+		free_all(table);
+		return (NULL);
+	}
+	table->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * table->nbr_of_philos);
+	if (table->forks == NULL)
+	{
+		free_all(table);
+		return (NULL);
+	}
+	while (i < table->nbr_of_philos)
+	{
+		pthread_mutex_init(&table->forks[i], NULL);	
+		i++;
+	}
+	pthread_mutex_init(&table->print, NULL);
+}
+
+void	init_philos(t_table *table)
+{
+	int	i;
+
+	i = 0;
+	while (i < table->nbr_of_philos)
+	{
+		table->philos[i].id = i;
+		table->philos[i].meals_eaten = 0;
+		table->philos[i].left_fork = i;
+		table->philos[i].right_fork = (i + 1) % table->nbr_of_philos;
+		table->philos[i].last_meal = 0;
+		table->philos[i].table = table;
+		i++;
+	}
 }

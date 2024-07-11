@@ -21,14 +21,17 @@
 # include <sys/time.h>
 # include <pthread.h>
 
-typedef struct s_args
+typedef struct s_table
 {
-	int	nbr_of_philo;
+	int	nbr_of_philos;
 	int	time_to_die;
 	int	time_to_eat;
 	int	time_to_sleep;
 	int	nbr_of_meals;
-}	t_args;
+	t_philo	*philos;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t	print;
+}	t_table;
 
 typedef struct s_philo
 {
@@ -38,16 +41,8 @@ typedef struct s_philo
 	int				right_fork;
 	int				last_meal;
 	pthread_t		thread;
-	t_args			*args;
+	t_table			*table;
 }	t_philo;
-
-typedef struct s_table
-{
-	t_philo	*philos;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	print;
-	t_args	args;
-}	t_table;
 
 void	ft_putstr_fd(char *str, int fd);
 int		ft_atoi(const char *str);

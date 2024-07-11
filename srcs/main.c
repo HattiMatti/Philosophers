@@ -12,28 +12,28 @@
 
 #include "../includes/philo.h"
 
-void	parse_args(int argc, char **argv, t_args *args)
+void	parse_args(int argc, char **argv, t_table *table)
 {
-	args->nbr_of_philo = ft_atoi(argv[1]);
-	args->time_to_die = ft_atoi(argv[2]);
-	args->time_to_eat = ft_atoi(argv[3]);
-	args->time_to_sleep = ft_atoi(argv[4]);
+	table->nbr_of_philos = ft_atoi(argv[1]);
+	table->time_to_die = ft_atoi(argv[2]);
+	table->time_to_eat = ft_atoi(argv[3]);
+	table->time_to_sleep = ft_atoi(argv[4]);
 	if (argc == 6)
-		args->nbr_of_meals = ft_atoi(argv[5]);
+		table->nbr_of_meals = ft_atoi(argv[5]);
 	else
-		args->nbr_of_meals = -1;
+		table->nbr_of_meals = -1;
 }
 
 int	main(int argc, char **argv)
 {
-	t_args	args;
+	t_table	table;
 
-	memset(&args, 0, sizeof(args));
+	memset(&table, 0, sizeof(table));
 	if (argc == 5 || argc == 6)
 	{
-		parse_args(argc, argv, &args);
-		printf("%d, %d, %d, %d, %d\n", args.nbr_of_philo, args.time_to_die,
-			args.time_to_eat, args.time_to_sleep, args.nbr_of_meals);
+		parse_args(argc, argv, &table);
+		printf("%d, %d, %d, %d, %d\n", table.nbr_of_philos, table.time_to_die,
+			table.time_to_eat, table.time_to_sleep, table.nbr_of_meals);
 	}
 	else
 		ft_putstr_fd("Error: wrong number of arguments\n", 2);
