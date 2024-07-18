@@ -21,20 +21,22 @@ void	init_table(t_table *table)
 	if (table->philos == NULL)
 	{
 		free_all(table);
-		return (NULL);
+		return ;
 	}
 	table->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * table->nbr_of_philos);
 	if (table->forks == NULL)
 	{
 		free_all(table);
-		return (NULL);
+		return ;
 	}
 	while (i < table->nbr_of_philos)
 	{
-		pthread_mutex_init(&table->forks[i], NULL);	
+		if (pthread_mutex_init(&table->forks[i], NULL) != 0)
+			erfre(table, i);
 		i++;
 	}
-	pthread_mutex_init(&table->print, NULL);
+	if (pthread_mutex_init(&table->print, NULL) != 0)
+		erfre(table, i);
 }
 
 void	init_philos(t_table *table)

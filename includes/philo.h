@@ -45,7 +45,10 @@ typedef struct s_philo
 }	t_philo;
 
 void	ft_putstr_fd(char *str, int fd);
+void	free_all(t_table *table);
+void	erfre(t_table *table,int i);
 int		ft_atoi(const char *str);
+
 
 
 
