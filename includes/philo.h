@@ -28,6 +28,7 @@ typedef struct s_table
 	int	time_to_eat;
 	int	time_to_sleep;
 	int	nbr_of_meals;
+	int	start;
 	t_philo	*philos;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print;
@@ -47,7 +48,10 @@ typedef struct s_philo
 void	ft_putstr_fd(char *str, int fd);
 void	free_all(t_table *table);
 void	erfre(t_table *table,int i);
+void	print_message(char *str, t_table *table);
+int		get_time(void);
 int		ft_atoi(const char *str);
+
 
 
 

@@ -34,6 +34,7 @@ int	main(int argc, char **argv)
 		parse_args(argc, argv, &table);
 		printf("%d, %d, %d, %d, %d\n", table.nbr_of_philos, table.time_to_die,
 			table.time_to_eat, table.time_to_sleep, table.nbr_of_meals);
+		print_message("TESTING", &table);	
 	}
 	else
 		ft_putstr_fd("Error: wrong number of arguments\n", 2);

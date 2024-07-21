@@ -59,3 +59,17 @@ void	ft_putstr_fd(char *str, int fd)
 		i++;
 	}
 }
+int	get_time(void)
+{
+	struct timeval t;
+
+	gettimeofday(&t, NULL);
+	return (t.tv_sec * 1000) + (t.tv_usec / 1000);
+}
+
+void	print_message(char *str, t_table *table)
+{
+	pthread_mutex_lock(&table->print);
+	printf("%d %d %s\n", get_time() - table->start, table->philos->id, str);
+	pthread_mutex_unlock(&table->print);
+}
