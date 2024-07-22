@@ -21,6 +21,8 @@
 # include <sys/time.h>
 # include <pthread.h>
 
+typedef struct s_philo t_philo;
+
 typedef struct s_table
 {
 	int	nbr_of_philos;
@@ -48,7 +50,10 @@ typedef struct s_philo
 void	ft_putstr_fd(char *str, int fd);
 void	free_all(t_table *table);
 void	erfre(t_table *table,int i);
-void	print_message(char *str, t_table *table);
+void	print_message(char *str, t_philo *philo);
+void	init_table(t_table *table);
+void	init_philos(t_table *table);
+void	*philosopher_routine(void *arg);
 int		get_time(void);
 int		ft_atoi(const char *str);
 

@@ -12,10 +12,10 @@
 
 #include "../includes/philo.h"
 
-void	check_args(int argc, char **argv)
+/*void	check_args(int argc, char **argv)
 {
 
-}
+}*/
 void	free_all(t_table *table)
 {
 	if (table != NULL)

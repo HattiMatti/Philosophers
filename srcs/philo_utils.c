@@ -67,9 +67,12 @@ int	get_time(void)
 	return (t.tv_sec * 1000) + (t.tv_usec / 1000);
 }
 
-void	print_message(char *str, t_table *table)
+void	print_message(char *str, t_philo *philo)
 {
+	t_table *table;
+
+	table = philo->table;
 	pthread_mutex_lock(&table->print);
-	printf("%d %d %s\n", get_time() - table->start, table->philos->id, str);
+	printf("%d %d %s\n", get_time() - table->start, philo->id, str);
 	pthread_mutex_unlock(&table->print);
 }

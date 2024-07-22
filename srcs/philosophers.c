@@ -17,6 +17,7 @@ void	init_table(t_table *table)
 	int	i;
 
 	i = 0;
+	
 	table->philos = (t_philo *)malloc(sizeof(t_philo) * table->nbr_of_philos);
 	if (table->philos == NULL)
 	{
@@ -54,4 +55,35 @@ void	init_philos(t_table *table)
 		table->philos[i].table = table;
 		i++;
 	}
+}
+void	*philosopher_routine(void *arg)
+{
+	t_philo	*philo;
+	t_table	*table;
+
+	philo = (t_philo *)arg;
+	table = philo->table;
+
+	while (1)
+	{
+		print_message("is thinking", philo);
+		usleep(1000000);
+
+		pthread_mutex_lock(&table->forks[philo->left_fork]);
+		print_message("has taken a fork", philo);
+		pthread_mutex_lock(&table->forks[philo->right_fork]);
+		print_message("has taken a fork", philo);
+
+		print_message("is eating", philo);
+		usleep(2000000);
+
+		pthread_mutex_unlock(&table->forks[philo->right_fork]);
+        pthread_mutex_unlock(&table->forks[philo->left_fork]);
+        print_message("has put down a fork", philo);
+        print_message("has put down a fork", philo);
+
+		print_message("is sleeping", philo);
+        usleep(1500000);
+	}
+	return NULL;
 }
