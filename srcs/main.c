@@ -32,11 +32,13 @@ void	create_threads(t_table *table)
 	while(i < table->nbr_of_philos)
 	{
 		pthread_create(&table->philos[i].thread, NULL, philosopher_routine, &table->philos[i]);
+		i++;
 	}
 	i= 0;
 	while (i < table->nbr_of_philos)
 	{
 		pthread_join(table->philos[i].thread, NULL);
+		i++;
 	}
 }
 
@@ -51,8 +53,6 @@ int	main(int argc, char **argv)
 		init_table(&table);
 		init_philos(&table);
 		create_threads(&table);
-		printf("%d, %d, %d, %d, %d\n", table.nbr_of_philos, table.time_to_die,
-			table.time_to_eat, table.time_to_sleep, table.nbr_of_meals);
 	}
 	else
 		ft_putstr_fd("Error: wrong number of arguments\n", 2);
