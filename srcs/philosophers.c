@@ -55,7 +55,7 @@ void	init_philos(t_table *table)
 		table->philos[i].table = table;
 		i++;
 	}
-}
+}	
 void	*philosopher_routine(void *arg)
 {
 	t_philo	*philo;

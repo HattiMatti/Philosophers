@@ -20,7 +20,12 @@ void	think(t_philo *philo)
 
 void take_forks(t_philo *philo)
 {
+	t_table *table = philo->table;
 
+	pthread_mutex_lock(&table->forks[philo->left_fork]);
+	print_message("has taken a fork", philo);
+	pthread_mutex_lock(&table->forks[philo->right_fork]);
+	print_message("has taken a fork", philo);
 }
 void	eat(t_philo *philo)
 {
