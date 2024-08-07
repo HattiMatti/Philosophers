@@ -22,11 +22,28 @@ void	free_all(t_table *table)
 	{
 		if (table->philos != NULL)
 			free(table->philos);
-		free(table);
+		if (table->forks != NULL)
+			free(table->forks);
 	}
 }
 
-void	erfre(t_table *table,int i)
+void	free_end(t_table *table)
+{
+	int	i;
+
+	i = 0;
+	while (i < table->nbr_of_philos)
+	{
+		pthread_mutex_destroy(&table->forks[i]);
+		i++;
+	}
+	pthread_mutex_destroy(&table->print);
+	pthread_mutex_destroy(&table->death);
+	free_all(table);
+	exit (EXIT_SUCCESS);
+}
+
+void	erfre(t_table *table, int i)
 {
 	int	j;
 
@@ -39,6 +56,7 @@ void	erfre(t_table *table,int i)
 			j++;
 		}
 		pthread_mutex_destroy(&table->print);
+		pthread_mutex_destroy(&table->death);
 	}
 	free_all(table);
 	exit(EXIT_FAILURE);

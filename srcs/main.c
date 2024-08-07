@@ -24,22 +24,26 @@ void	parse_args(int argc, char **argv, t_table *table)
 	else
 		table->nbr_of_meals = -1;
 }
+
 void	create_threads(t_table *table)
 {
 	int	i;
 
 	i = 0;
-	while(i < table->nbr_of_philos)
+	while (i < table->nbr_of_philos)
 	{
-		pthread_create(&table->philos[i].thread, NULL, philosopher_routine, &table->philos[i]);
+		pthread_create(&table->philos[i].thread, NULL,
+			philosopher_routine, &table->philos[i]);
 		i++;
 	}
-	i= 0;
+	pthread_create(&table->monitor_thread, NULL, monitor, table);
+	i = 0;
 	while (i < table->nbr_of_philos)
 	{
 		pthread_join(table->philos[i].thread, NULL);
 		i++;
 	}
+	pthread_join(table->monitor_thread, NULL);
 }
 
 int	main(int argc, char **argv)
@@ -51,11 +55,12 @@ int	main(int argc, char **argv)
 	{
 		parse_args(argc, argv, &table);
 		init_table(&table);
+		pthread_mutex_init(&table.death, NULL);
 		init_philos(&table);
 		create_threads(&table);
+		free_end(&table);
 	}
 	else
 		ft_putstr_fd("Error: wrong number of arguments\n", 2);
-	return (0);
-	
+	return (EXIT_SUCCESS);
 }

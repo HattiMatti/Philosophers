@@ -12,7 +12,7 @@
 
 NAME = philo
 
-SRCS = srcs/main.c srcs/philo_utils.c srcs/erfre.c srcs/philosophers.c
+SRCS = srcs/main.c srcs/philo_utils.c srcs/erfre.c srcs/philosophers.c srcs/actions.c srcs/monitor_utils.c
 
 CFLAGS = -Wall -Wextra -Werror
 

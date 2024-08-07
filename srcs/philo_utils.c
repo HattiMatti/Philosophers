@@ -59,9 +59,10 @@ void	ft_putstr_fd(char *str, int fd)
 		i++;
 	}
 }
+
 int	get_time(void)
 {
-	struct timeval t;
+	struct timeval	t;
 
 	gettimeofday(&t, NULL);
 	return (t.tv_sec * 1000) + (t.tv_usec / 1000);
@@ -69,10 +70,11 @@ int	get_time(void)
 
 void	print_message(char *str, t_philo *philo)
 {
-	t_table *table;
+	t_table	*table;
 
 	table = philo->table;
 	pthread_mutex_lock(&table->print);
-	printf("%d %d %s\n", get_time() - table->start, philo->id, str);
+	if (!table->died)
+		printf("%d %d %s\n", get_time() - table->start, philo->id, str);
 	pthread_mutex_unlock(&table->print);
 }
