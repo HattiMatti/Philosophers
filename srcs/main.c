@@ -53,6 +53,11 @@ int	main(int argc, char **argv)
 	memset(&table, 0, sizeof(table));
 	if (argc == 5 || argc == 6)
 	{
+		if (is_pos(argc, argv) == 1 || check_args(argc, argv) == 1)
+		{
+			ft_putstr_fd("Error: Invalid arguments\n", 2);
+			return (EXIT_FAILURE);
+		}
 		parse_args(argc, argv, &table);
 		init_table(&table);
 		pthread_mutex_init(&table.death, NULL);

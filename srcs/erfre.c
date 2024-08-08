@@ -12,12 +12,11 @@
 
 #include "../includes/philo.h"
 
-/*void	check_args(int argc, char **argv)
-{
-
-}*/
 void	free_all(t_table *table)
 {
+	int	i;
+
+	i = 0;
 	if (table != NULL)
 	{
 		if (table->philos != NULL)
@@ -36,6 +35,11 @@ void	free_end(t_table *table)
 	{
 		pthread_mutex_destroy(&table->forks[i]);
 		i++;
+	}
+	i = 0;
+	while (table->philos)
+	{
+
 	}
 	pthread_mutex_destroy(&table->print);
 	pthread_mutex_destroy(&table->death);

@@ -70,11 +70,10 @@ void	*philosopher_routine(void *arg)
 			break ;
 		}
 		pthread_mutex_unlock(&philo->table->death);
-		think(philo);
 		take_forks(philo);
-		printf("test");
 		eat(philo);
 		philo_sleep(philo);
+		think(philo);
 	}
 	return (NULL);
 }

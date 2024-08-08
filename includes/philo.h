@@ -68,7 +68,9 @@ int		monitor_death(int current_time, t_table *table, int i);
 void	free_end(t_table *table);
 int		get_time(void);
 int		ft_atoi(const char *str);
-
+int		check_args(int argc, char **argv);
+int		is_pos(int argc, char **argv);
+int 	is_number(char arg);
 
 
 
