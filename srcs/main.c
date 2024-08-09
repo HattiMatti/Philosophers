@@ -14,7 +14,6 @@
 
 void	parse_args(int argc, char **argv, t_table *table)
 {
-	table->start = get_time();
 	table->nbr_of_philos = ft_atoi(argv[1]);
 	table->time_to_die = ft_atoi(argv[2]);
 	table->time_to_eat = ft_atoi(argv[3]);
@@ -29,6 +28,7 @@ void	create_threads(t_table *table)
 {
 	int	i;
 
+	table->start = get_time();
 	i = 0;
 	while (i < table->nbr_of_philos)
 	{

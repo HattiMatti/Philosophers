@@ -68,7 +68,7 @@ int	get_time(void)
 	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
 }
 
-int	print_message(const char *str, const t_philo *philo)
+int	print_message(const char *str, t_philo *philo)
 {
 	t_table	*table;
 	int		current_time;

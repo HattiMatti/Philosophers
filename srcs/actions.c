@@ -30,18 +30,20 @@ int	take_forks(t_philo *philo)
 		return (-1);
 	pthread_mutex_lock(&table->forks[philo->first_fork]);
 	philo->forks_locked = 1;
+	if (has_philosopher_died(philo))
+		return (-1);
 	if (print_message("has taken a fork", philo) != 0)
 	{
 		pthread_mutex_unlock(&table->forks[philo->first_fork]);
 		return (-1);
 	}
-	pthread_mutex_lock(&table->forks[philo->second_fork]);
 	if (print_message("has taken a fork", philo) != 0)
 	{
+		pthread_mutex_lock(&table->forks[philo->second_fork]);
+		philo->forks_locked = 2;
 		release_forks(philo);
 		return (-1);
 	}
-	philo->forks_locked = 2;
 	return (0);
 }
 
@@ -64,7 +66,8 @@ int	eat(t_philo *philo)
 	pthread_mutex_unlock(&philo->table->last_meal_mutex);
 	usleep(philo->table->time_to_eat * 1000);
 	release_forks(philo);
-	if (print_message("has put down forks", philo) != 0)
+	if (has_philosopher_died(philo)
+		|| print_message("has put down forks", philo) != 0)
 	{
 		pthread_mutex_unlock(&philo->eat_mutex);
 		return (-1);

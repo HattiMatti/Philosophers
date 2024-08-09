@@ -59,7 +59,7 @@ typedef struct s_philo
 void	ft_putstr_fd(char *str, int fd);
 void	free_all(t_table *table);
 void	erfre(t_table *table, int i);
-int		print_message(const char *str, const t_philo *philo);
+int		print_message(const char *str, t_philo *philo);
 void	init_table(t_table *table);
 void	init_philos(t_table *table);
 void	*philosopher_routine(void *arg);
