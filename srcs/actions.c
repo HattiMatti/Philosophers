@@ -28,48 +28,48 @@ int	take_forks(t_philo *philo)
 	table = philo->table;
 	if (determine_forks(philo) != 0 || has_philosopher_died(philo))
 		return (-1);
-	if (pthread_mutex_lock(&table->forks[philo->first_fork]) != 0)
-		return (-1);
+	pthread_mutex_lock(&table->forks[philo->first_fork]);
+	philo->forks_locked = 1;
 	if (print_message("has taken a fork", philo) != 0)
 	{
 		pthread_mutex_unlock(&table->forks[philo->first_fork]);
 		return (-1);
 	}
-	if (pthread_mutex_lock(&table->forks[philo->second_fork]) != 0)
-	{
-		pthread_mutex_unlock(&table->forks[philo->first_fork]);
-		return (-1);
-	}
+	pthread_mutex_lock(&table->forks[philo->second_fork]);
 	if (print_message("has taken a fork", philo) != 0)
 	{
-		pthread_mutex_unlock(&table->forks[philo->first_fork]);
-		pthread_mutex_unlock(&table->forks[philo->second_fork]);
+		release_forks(philo);
 		return (-1);
 	}
+	philo->forks_locked = 2;
 	return (0);
 }
 
 int	eat(t_philo *philo)
 {
-	t_table	*table;
-
-	table = philo->table;
 	if (has_philosopher_died(philo))
 		return (-1);
+	pthread_mutex_lock(&philo->eat_mutex);
 	if (print_message("is eating", philo) != 0)
+	{
+		pthread_mutex_unlock(&philo->eat_mutex);
 		return (-1);
-	pthread_mutex_lock(&philo->last_meal_mutex);
+	}
+	pthread_mutex_lock(&philo->table->last_meal_mutex);
+	pthread_mutex_lock(&philo->table->death);
 	philo->last_meal = get_time();
-	pthread_mutex_unlock(&philo->last_meal_mutex);
-	if (table->nbr_of_meals != -1)
+	if (philo->table->nbr_of_meals != -1)
 		philo->meals_eaten++;
-	usleep(table->time_to_eat * 1000);
-	if (pthread_mutex_unlock(&table->forks[philo->left_fork]) != 0)
-		return (-1);
-	if (pthread_mutex_unlock(&table->forks[philo->right_fork]) != 0)
-		return (-1);
+	pthread_mutex_unlock(&philo->table->death);
+	pthread_mutex_unlock(&philo->table->last_meal_mutex);
+	usleep(philo->table->time_to_eat * 1000);
+	release_forks(philo);
 	if (print_message("has put down forks", philo) != 0)
+	{
+		pthread_mutex_unlock(&philo->eat_mutex);
 		return (-1);
+	}
+	pthread_mutex_unlock(&philo->eat_mutex);
 	return (0);
 }
 
@@ -88,12 +88,12 @@ void	release_forks(t_philo *philo)
 	t_table	*table;
 
 	table = philo->table;
-	if (pthread_mutex_unlock(&table->forks[philo->left_fork]) != 0)
+	if (philo->forks_locked == 2)
 	{
-		fprintf(stderr, "Error: Failed to unlock left fork mutex\n");
+		pthread_mutex_unlock(&table->forks[philo->left_fork]);
+		pthread_mutex_unlock(&table->forks[philo->right_fork]);
 	}
-	if (pthread_mutex_unlock(&table->forks[philo->right_fork]) != 0)
-	{
-		fprintf(stderr, "Error: Failed to unlock right fork mutex\n");
-	}
+	else if (philo->forks_locked == 1)
+		pthread_mutex_unlock(&table->forks[philo->first_fork]);
+	philo->forks_locked = 0;
 }

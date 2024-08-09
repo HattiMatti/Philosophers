@@ -31,14 +31,10 @@ void	free_end(t_table *table)
 	while (i < table->nbr_of_philos)
 	{
 		pthread_mutex_destroy(&table->forks[i]);
+		pthread_mutex_destroy(&table->philos[i].eat_mutex);
 		i++;
 	}
-	i = 0;
-	while (i < table->nbr_of_philos)
-	{
-		pthread_mutex_destroy(&table->philos[i].last_meal_mutex);
-		i++;
-	}
+	pthread_mutex_destroy(&table->last_meal_mutex);
 	pthread_mutex_destroy(&table->print);
 	pthread_mutex_destroy(&table->death);
 	free_all(table);

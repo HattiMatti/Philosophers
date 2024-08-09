@@ -7,6 +7,7 @@ int	monitor_death(int current_time, t_table *table, int i)
 	{
 		print_message("died", &table->philos[i]);
 		table->died = 1;
+		table->philos[i].died = 1;
 		pthread_mutex_unlock(&table->death);
 		return (1);
 	}
@@ -21,6 +22,7 @@ void	monitor_meals(t_table *table)
 
 	all_meals_eaten = 1;
 	i = 0;
+	pthread_mutex_lock(&table->last_meal_mutex);
 	if (table->nbr_of_meals != -1)
 	{
 		while (i < table->nbr_of_philos)
@@ -39,6 +41,7 @@ void	monitor_meals(t_table *table)
 			pthread_mutex_unlock(&table->death);
 		}
 	}
+	pthread_mutex_unlock(&table->last_meal_mutex);
 }
 
 void	*monitor(void *arg)

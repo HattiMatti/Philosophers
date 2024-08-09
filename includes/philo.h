@@ -36,6 +36,7 @@ typedef struct s_table
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print;
 	pthread_mutex_t	death;
+	pthread_mutex_t	last_meal_mutex;
 	pthread_t		monitor_thread;
 }	t_table;
 
@@ -49,7 +50,8 @@ typedef struct s_philo
 	int				died;
 	int				first_fork;
 	int				second_fork;
-	pthread_mutex_t	last_meal_mutex;
+	int				forks_locked;
+	pthread_mutex_t	eat_mutex;
 	pthread_t		thread;
 	t_table			*table;
 }	t_philo;

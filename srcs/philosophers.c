@@ -32,12 +32,11 @@ void	init_table(t_table *table)
 	}
 	while (i < table->nbr_of_philos)
 	{
-		if (pthread_mutex_init(&table->forks[i], NULL) != 0)
-			erfre(table, i);
+		pthread_mutex_init(&table->forks[i], NULL);
 		i++;
 	}
-	if (pthread_mutex_init(&table->print, NULL) != 0)
-		erfre(table, i);
+	pthread_mutex_init(&table->print, NULL);
+	pthread_mutex_init(&table->last_meal_mutex, NULL);
 }
 
 void	init_philos(t_table *table)
@@ -55,7 +54,8 @@ void	init_philos(t_table *table)
 		table->philos[i].table = table;
 		table->philos[i].first_fork = 0;
 		table->philos[i].second_fork = 0;
-		pthread_mutex_init(&table->philos[i].last_meal_mutex, NULL);
+		table->philos[i].forks_locked = 0;
+		pthread_mutex_init(&table->philos[i].eat_mutex, NULL);
 		i++;
 	}
 }
@@ -76,12 +76,10 @@ void	*philosopher_routine(void *arg)
 		}
 		if (eat(philo) != 0 || has_philosopher_died(philo))
 		{
-			release_forks(philo);
 			break ;
 		}
 		if (philo_sleep(philo) != 0 || has_philosopher_died(philo))
 		{
-			release_forks(philo);
 			break ;
 		}
 		think(philo);
