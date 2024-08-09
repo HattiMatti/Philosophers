@@ -40,22 +40,3 @@ void	free_end(t_table *table)
 	free_all(table);
 	return ;
 }
-
-void	erfre(t_table *table, int i)
-{
-	int	j;
-
-	j = 0;
-	if (table != NULL && table->forks != NULL)
-	{
-		while (j < i)
-		{
-			pthread_mutex_destroy(&table->forks[j]);
-			j++;
-		}
-		pthread_mutex_destroy(&table->print);
-		pthread_mutex_destroy(&table->death);
-	}
-	free_all(table);
-	exit(EXIT_FAILURE);
-}

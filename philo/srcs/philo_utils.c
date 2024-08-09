@@ -74,22 +74,9 @@ int	print_message(const char *str, t_philo *philo)
 	int		current_time;
 
 	table = philo->table;
-	if (pthread_mutex_lock(&table->print) != 0)
-	{
-		ft_putstr_fd("Error: Failed to lock print mutex\n", 2);
-		return (-1);
-	}
+	pthread_mutex_lock(&table->print);
 	current_time = get_time() - table->start;
-	if (printf("%d %d %s\n", current_time, philo->id, str) < 0)
-	{
-		ft_putstr_fd("Error: Failed to write to stdout\n", 2);
-		pthread_mutex_unlock(&table->print);
-		return (-1);
-	}
-	if (pthread_mutex_unlock(&table->print) != 0)
-	{
-		ft_putstr_fd("Error: Failed to unlock print mutex\n", 2);
-		return (-1);
-	}
+	printf("%d %d %s\n", current_time, philo->id, str);
+	pthread_mutex_unlock(&table->print);
 	return (0);
 }

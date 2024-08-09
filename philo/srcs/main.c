@@ -14,7 +14,7 @@
 
 void	parse_args(int argc, char **argv, t_table *table)
 {
-	table->nbr_of_philos = ft_atoi(argv[1]);
+	table->nbr_of_philos = (ft_atoi(argv[1]));
 	table->time_to_die = ft_atoi(argv[2]);
 	table->time_to_eat = ft_atoi(argv[3]);
 	table->time_to_sleep = ft_atoi(argv[4]);

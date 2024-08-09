@@ -44,7 +44,7 @@ void	init_philos(t_table *table)
 	int	i;
 
 	i = 0;
-	while (i < table->nbr_of_philos)
+	while (i < (table->nbr_of_philos))
 	{
 		table->philos[i].id = i + 1;
 		table->philos[i].meals_eaten = 0;
@@ -65,10 +65,9 @@ void	*philosopher_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	while (get_time() < philo->table->start)
-		usleep(100);
 	while (1)
 	{
+		think(philo);
 		if (has_philosopher_died(philo))
 			break ;
 		if (take_forks(philo) != 0 || has_philosopher_died(philo))
@@ -84,7 +83,6 @@ void	*philosopher_routine(void *arg)
 		{
 			break ;
 		}
-		think(philo);
 	}
 	return (NULL);
 }
@@ -100,7 +98,8 @@ int	determine_forks(t_philo *philo)
 		usleep(table->time_to_die * 1000);
 		return (1);
 	}
-	//fork_wait(philo);
+	if (philo->id == table->nbr_of_philos && get_time() < table->time_to_eat)
+		usleep(table->time_to_eat);
 	if (philo->id % 2 == 0)
 	{
 		philo->first_fork = philo->left_fork;
@@ -113,20 +112,3 @@ int	determine_forks(t_philo *philo)
 	}
 	return (0);
 }
-/*
-void	fork_wait(t_philo *philo)
-{
-	t_table	*table;
-	int		wait_time;
-
-	table = philo->table;
-	wait_time = (table->time_to_eat / 10 * 1000);
-	if (philo->id % 2 == 0)
-	{
-		usleep(wait_time);
-	}
-	else
-	{
-		usleep(wait_time / 2);
-	}
-}*/
