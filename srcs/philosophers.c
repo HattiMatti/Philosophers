@@ -23,7 +23,8 @@ void	init_table(t_table *table)
 		free_all(table);
 		return ;
 	}
-	table->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * table->nbr_of_philos);
+	table->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t)
+			* table->nbr_of_philos);
 	if (table->forks == NULL)
 	{
 		free_all(table);
@@ -52,6 +53,9 @@ void	init_philos(t_table *table)
 		table->philos[i].right_fork = (i + 1) % table->nbr_of_philos;
 		table->philos[i].last_meal = get_time();
 		table->philos[i].table = table;
+		table->philos[i].first_fork = 0;
+		table->philos[i].second_fork = 0;
+		pthread_mutex_init(&table->philos[i].last_meal_mutex, NULL);
 		i++;
 	}
 }
@@ -61,42 +65,68 @@ void	*philosopher_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	while (philo->table->died == 0)
+	while (1)
 	{
-		pthread_mutex_lock(&philo->table->death);
-		if (philo->table->died)
+		if (has_philosopher_died(philo))
+			break ;
+		if (take_forks(philo) != 0 || has_philosopher_died(philo))
 		{
-			pthread_mutex_unlock(&philo->table->death);
+			release_forks(philo);
 			break ;
 		}
-		pthread_mutex_unlock(&philo->table->death);
-		take_forks(philo);
-		eat(philo);
-		philo_sleep(philo);
+		if (eat(philo) != 0 || has_philosopher_died(philo))
+		{
+			release_forks(philo);
+			break ;
+		}
+		if (philo_sleep(philo) != 0 || has_philosopher_died(philo))
+		{
+			release_forks(philo);
+			break ;
+		}
 		think(philo);
 	}
 	return (NULL);
 }
 
-void	*monitor(void *arg)
+int	determine_forks(t_philo *philo)
 {
-	t_table		*table;
-	int			i;
-	long long	current_time;
+	t_table	*table;
 
-	table = (t_table *)arg;
-	while (1)
+	table = philo->table;
+	if (table->nbr_of_philos == 1)
 	{
-		i = 0;
-		while (i < table->nbr_of_philos)
-		{
-			current_time = get_time();
-			if (monitor_death(current_time, table, i) == 1)
-				break ;
-			monitor_meals(table, i);
-			i++;
-		}
-		usleep(1000);
+		print_message("has taken a fork", philo);
+		usleep(table->time_to_die * 1000);
+		return (1);
 	}
-	return (NULL);
+	fork_wait(philo);
+	if (philo->id % 2 == 0)
+	{
+		philo->first_fork = philo->left_fork;
+		philo->second_fork = philo->right_fork;
+	}
+	else
+	{
+		philo->first_fork = philo->right_fork;
+		philo->second_fork = philo->left_fork;
+	}
+	return (0);
+}
+
+void	fork_wait(t_philo *philo)
+{
+	t_table	*table;
+	int		wait_time;
+
+	table = philo->table;
+	wait_time = (table->time_to_eat / 10) * 1000;
+	if (philo->id % 2 == 0)
+	{
+		usleep(wait_time);
+	}
+	else
+	{
+		usleep(wait_time / 2);
+	}
 }

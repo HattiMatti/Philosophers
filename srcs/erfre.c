@@ -14,9 +14,6 @@
 
 void	free_all(t_table *table)
 {
-	int	i;
-
-	i = 0;
 	if (table != NULL)
 	{
 		if (table->philos != NULL)
@@ -37,14 +34,15 @@ void	free_end(t_table *table)
 		i++;
 	}
 	i = 0;
-	while (table->philos)
+	while (i < table->nbr_of_philos)
 	{
-
+		pthread_mutex_destroy(&table->philos[i].last_meal_mutex);
+		i++;
 	}
 	pthread_mutex_destroy(&table->print);
 	pthread_mutex_destroy(&table->death);
 	free_all(table);
-	exit (EXIT_SUCCESS);
+	return ;
 }
 
 void	erfre(t_table *table, int i)

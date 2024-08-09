@@ -14,18 +14,69 @@ int	monitor_death(int current_time, t_table *table, int i)
 	return (0);
 }
 
-void	monitor_meals(t_table *table, int i)
+void	monitor_meals(t_table *table)
 {
 	int	all_meals_eaten;
+	int	i;
 
 	all_meals_eaten = 1;
+	i = 0;
 	if (table->nbr_of_meals != -1)
 	{
-		if (table->philos[i].meals_eaten < table->nbr_of_meals)
+		while (i < table->nbr_of_philos)
 		{
-			all_meals_eaten = 0;
+			if (table->philos[i].meals_eaten < table->nbr_of_meals)
+			{
+				all_meals_eaten = 0;
+				break ;
+			}
+			i++;
 		}
 		if (all_meals_eaten)
+		{
+			pthread_mutex_lock(&table->death);
 			table->died = 1;
+			pthread_mutex_unlock(&table->death);
+		}
 	}
+}
+
+void	*monitor(void *arg)
+{
+	t_table		*table;
+	int			i;
+
+	table = (t_table *)arg;
+	while (1)
+	{
+		pthread_mutex_lock(&table->death);
+		if (table->died)
+		{
+			pthread_mutex_unlock(&table->death);
+			break ;
+		}
+		pthread_mutex_unlock(&table->death);
+		i = 0;
+		while (i < table->nbr_of_philos)
+		{
+			if (monitor_death(get_time(), table, i))
+				break ;
+			i++;
+		}
+		monitor_meals(table);
+		usleep(1000);
+	}
+	return (NULL);
+}
+
+int	has_philosopher_died(t_philo *philo)
+{
+	t_table	*table;
+	int		died;
+
+	table = philo->table;
+	pthread_mutex_lock(&table->death);
+	died = table->died;
+	pthread_mutex_unlock(&table->death);
+	return (died);
 }

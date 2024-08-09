@@ -12,7 +12,7 @@
 
 #include "../includes/philo.h"
 
-int is_number(char arg)
+int	is_number(char arg)
 {
 	if (arg >= '0' && arg <= '9')
 		return (0);
@@ -22,7 +22,7 @@ int is_number(char arg)
 
 int	is_pos(int argc, char **argv)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	if (ft_atoi(argv[1]) > 200)
@@ -36,26 +36,26 @@ int	is_pos(int argc, char **argv)
 	return (0);
 }
 
-int check_args(int argc, char **argv)
+int	check_args(int argc, char **argv)
 {
 	int	i;
 	int	j;
 
 	i = 1;
-	while (i < argc) 
+	while (i < argc)
 	{
 		j = 0;
 		if (argv[i][0] == '\0')
-			return 1;
+			return (1);
 		while (argv[i][j] == '+')
 			j++;
 		while (argv[i][j] != '\0')
 		{
 			if (is_number(argv[i][j]) != 0)
-				return 1;
+				return (1);
 			j++;
 		}
 		i++;
 	}
-	return 0;
+	return (0);
 }

@@ -65,16 +65,34 @@ int	get_time(void)
 	struct timeval	t;
 
 	gettimeofday(&t, NULL);
-	return (t.tv_sec * 1000) + (t.tv_usec / 1000);
+	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
 }
 
-void	print_message(char *str, t_philo *philo)
+int	print_message(const char *str, const t_philo *philo)
 {
 	t_table	*table;
+	int		current_time;
 
 	table = philo->table;
-	pthread_mutex_lock(&table->print);
+	if (pthread_mutex_lock(&table->print) != 0)
+	{
+		ft_putstr_fd("Error: Failed to lock print mutex\n", 2);
+		return (-1);
+	}
 	if (!table->died)
-		printf("%d %d %s\n", get_time() - table->start, philo->id, str);
-	pthread_mutex_unlock(&table->print);
+	{
+		current_time = get_time() - table->start;
+		if (printf("%d %d %s\n", current_time, philo->id, str) < 0)
+		{
+			ft_putstr_fd("Error: Failed to write to stdout\n", 2);
+			pthread_mutex_unlock(&table->print);
+			return (-1);
+		}
+	}
+	if (pthread_mutex_unlock(&table->print) != 0)
+	{
+		ft_putstr_fd("Error: Failed to unlock print mutex\n", 2);
+		return (-1);
+	}
+	return (0);
 }
